@@ -1,0 +1,150 @@
+---
+title: 'Leaflet Assignment: Tech Giants'' Offices in London'
+author: "Gary Mu"
+always_allow_html: yes
+output:
+  html_document:
+    code_folding: hide
+---
+
+## Introduction
+
+This is an assignment for Data Products, which is one of the courses 
+under Coursera Data Science cluster.
+
+In this assignment, I am going to utilize Leaflet mapping functionality to create 
+an interactive map that will pinpoint the giant tech offices (Google, King, Facebook, etc)
+in London. Note that the office locations are from public information sources like 
+Google maps with no proprietary information. 
+
+## Load the necessary packages
+```{r, echo=FALSE, message=FALSE}
+require(leaflet)
+require(tidyverse)
+```
+
+
+## Create map object and showcase London
+
+Now I will create a map object from leaflet, and pinpoint London city from tile 
+to show London city from the map tile. 
+
+```{r}
+london <- leaflet() %>% 
+  addTiles() %>% 
+  addMarkers(lat = 51.52, lng = -0.11, popup = 'London City')
+  
+london
+```
+
+## Adding tech company markers
+
+Now I will add markers of the tech companies' offices.
+I will add office locations of the following companies: 
+Google, Facebook, King, Twitter, Microsoft, Linkedin and Youtube.
+
+You can click on the icons to view more details of the office addresses, or
+link to the company's "about me" pages.
+
+#### December 4th, 2017
+
+```{r}
+
+companies <- c('Twitter', 'Google-cental', 'Google-kingscross' , 'Youtube',
+               'Facebook-brock', 'Facebook-rothbone', 'King', 'Microsoft', 'Linkedin')
+
+company_latlon <- data.frame(
+    lat = c(51.510579, 51.516047, 51.533598, 51.532831, 51.525697, 51.517099, 51.515457, 51.519460, 51.516202),
+    lng = c(-0.136577, -0.127648, -0.126365, -0.125935 , -0.139754, -0.133619, -0.135509, -0.181427, -0.128148)
+)
+
+logos <- makeIcon(
+    iconUrl = c(
+      'https://cdn1.iconfinder.com/data/icons/smallicons-logotypes/32/twitter-128.png', #twitter
+      'https://cdn1.iconfinder.com/data/icons/smallicons-logotypes/32/google_-128.png', #google
+      'https://cdn1.iconfinder.com/data/icons/smallicons-logotypes/32/google_-128.png', #google
+      'https://cdn1.iconfinder.com/data/icons/smallicons-logotypes/32/youtube-128.png', #Youtube
+      'https://cdn1.iconfinder.com/data/icons/smallicons-logotypes/32/facebook-128.png', #facebook
+      'https://cdn1.iconfinder.com/data/icons/smallicons-logotypes/32/facebook-128.png', #facebook
+      'https://care.king.com/data/king_qna_en/media/members/image/68/93/53/179/3716/5619ea3416a50d3b/thumbs/king_50_50_DEFAULT_cropfit_NORTH.jpg', #king
+      'https://cdn1.iconfinder.com/data/icons/smallicons-logotypes/32/microsoft-128.png', #microsoft
+      'https://cdn1.iconfinder.com/data/icons/smallicons-logotypes/32/linkedin-128.png' #linkedin
+      ),
+    iconWidth = 31, iconHeight = 31,
+    iconAnchorX = 31*215/230/2, iconAnchorY = 1
+)
+
+
+twitter_info <- paste(sep = "<br/>",
+  "<b><a href='http://about.twitter.com'>About Twitter</a></b>",
+  "20 Air St, Soho",
+  "London W1B 5AG"
+)
+
+google_info_central <- paste(sep = "<br/>",
+  "<b><a href='http://google.com/about'>About Google</a></b>",
+  "1-13 St Giles High St",
+  "London WC2H 8AG"
+)
+
+google_info_kings <- paste(sep = "<br/>",
+  "<b><a href='http://google.com/about'>About Google</a></b>",
+  "6 Pancras Square, Kings Cross",
+  "London N1C 4AG"
+)
+
+youtube_info_kings <- paste(sep = "<br/>",
+  "<b><a href='http://google.com/about'>About Youtube</a></b>",
+  "6 Pancras Rd, Kings Cross",
+  "London N1C 4AG"
+)
+
+facebook_info_central <- paste(sep = "<br/>",
+  "<b><a href='http://facebook.com/about'>About Facebook</a></b>",
+  "10 Brock St",
+  "London NW1 3FG"
+)
+
+facebook_info_rothbone<- paste(sep = "<br/>",
+  "<b><a href='http://facebook.com/about'>About Facebook</a></b>",
+  "35 Rathbone Pl, Fitzrovia",
+  "London W1T 1QU"
+)
+
+king_info <- paste(sep = "<br/>",
+  "<b><a href='http://www.king.com/about'>About King</a></b>",
+  "178 Wardour St, Soho",
+  "London W1F 8FY"
+)
+
+linkedin_info <- paste(sep = "<br/>",
+  "<b><a href='http://www.king.com/about'>About King</a></b>",
+  "Castlewood House, 77-91 New Oxford St",
+  "London WC1A 1DG"
+)
+
+microsoft_info <- paste(sep = "<br/>",
+  "<b><a href='http://www.king.com/about'>About King</a></b>",
+  "2 Kingdom St",
+  "London W2 6BD"
+)
+
+
+company_latlon %>%
+    leaflet() %>%
+    addTiles() %>%
+  addMarkers( icon = logos,
+              popup = c(twitter_info,
+                        google_info_central,
+                        google_info_kings,
+                        youtube_info_kings,
+                        facebook_info_central,
+                        facebook_info_rothbone,
+                        king_info,
+                        microsoft_info,
+                        linkedin_info
+              ))
+
+```
+
+
